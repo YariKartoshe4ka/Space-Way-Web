@@ -1,38 +1,10 @@
-$color-background: #000310;
-$color-text: #ffffff;
-$color-text-border: #0099ff;
-
-@font-face {
-  font-family: "Pixeboy";
-  src: url("/static/font/pixeboy.ttf") format("truetype");
-}
-
-
-// Stroke font-character
-// @param  {Integer} $stroke - Stroke width
-// @param  {Color}   $color  - Stroke color
-// @return {List}            - text-shadow list
-@function stroke($stroke, $color) {
-  $shadow: ();
-  $from: $stroke * -1;
-  @for $i from $from through $stroke {
-    @for $j from $from through $stroke {
-      $shadow: append($shadow, $i * 1px $j * 1px 0 $color, comma);
-    }
-  }
-  @return $shadow;
-}
+@use "variables" as *;
+@use "functions" as *;
 
 
 * {
-  // Base
   margin: 0;
   padding: 0;
-
-  // Font
-  color: $color-text;
-  text-shadow: stroke(2px, $color-text-border);
-  font-family: "Pixeboy";
 }
 
 html, body {
@@ -44,16 +16,35 @@ body {
 }
 
 .container {
-  margin-top: 3em;
+  margin-top: 50px;
   text-align: center;
+
+  color: $color-text;
+  text-shadow: stroke(2px, $color-text-border);
+  font-family: "Pixeboy";
+}
+
+.player {
+  margin-top: -3px;
+  text-shadow: stroke(1px, $color-text-border);
+}
+
+#rating {
+  margin-top: 50px;
+  font-family: "Lato";
+  font-size: 45px;
 }
 
 .container>h1 {
-  font-size: 7em;
+  font-size: 110px;
 }
 
 @media (max-width: 720px) {
   .container>h1 {
-    font-size: 5em;
+    font-size: 80px;
+  }
+
+  #rating {
+    font-size: 25px;
   }
 }

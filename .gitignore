@@ -3,6 +3,9 @@ __pycache__/
 *.pyc
 venv/
 
+# Styles generated with Sass
+css/
+
 # Django database
 db.sqlite3
 

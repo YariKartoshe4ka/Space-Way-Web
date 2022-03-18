@@ -6,10 +6,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Space Way</title>
   <link rel="stylesheet" href="{% static 'css/index.css' %}">
+  <style>
+    @font-face {
+      font-family: "Pixeboy";
+      src: url("{% static 'font/pixeboy.ttf' %}") format("truetype");
+    }
+
+    @font-face {
+      font-family: "Lato";
+      src: url("{% static 'font/lato.ttf' %}") format("truetype");
+    }
+
+    @font-face {
+      font-family: "Pixel";
+      src: url("{% static 'font/pixel.woff2' %}") format("woff2");
+    }
+  </style>
 </head>
 <body>
   <div class="container">
     <h1 id="header">Space Way</h1>
+
+    <div id="rating"></div>
   </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="{% static 'js/index.js' %}"></script>
 </body>
 </html>
