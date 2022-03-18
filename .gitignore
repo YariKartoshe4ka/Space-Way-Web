@@ -1,0 +1,10 @@
+# Python specific files
+__pycache__/
+*.pyc
+venv/
+
+# Django database
+db.sqlite3
+
+# Project security files
+.env

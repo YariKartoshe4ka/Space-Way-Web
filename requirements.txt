@@ -1,0 +1,2 @@
+Django<5,>=4
+python-dotenv>=0.19.2
