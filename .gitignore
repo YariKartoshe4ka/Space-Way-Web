@@ -8,3 +8,6 @@ db.sqlite3
 
 # Project security files
 .env
+
+# IDE's and other configs
+prepros.config

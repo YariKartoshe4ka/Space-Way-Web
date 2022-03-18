@@ -1,0 +1,59 @@
+$color-background: #000310;
+$color-text: #ffffff;
+$color-text-border: #0099ff;
+
+@font-face {
+  font-family: "Pixeboy";
+  src: url("/static/font/pixeboy.ttf") format("truetype");
+}
+
+
+// Stroke font-character
+// @param  {Integer} $stroke - Stroke width
+// @param  {Color}   $color  - Stroke color
+// @return {List}            - text-shadow list
+@function stroke($stroke, $color) {
+  $shadow: ();
+  $from: $stroke * -1;
+  @for $i from $from through $stroke {
+    @for $j from $from through $stroke {
+      $shadow: append($shadow, $i * 1px $j * 1px 0 $color, comma);
+    }
+  }
+  @return $shadow;
+}
+
+
+* {
+  // Base
+  margin: 0;
+  padding: 0;
+
+  // Font
+  color: $color-text;
+  text-shadow: stroke(2px, $color-text-border);
+  font-family: "Pixeboy";
+}
+
+html, body {
+  width: 100%;
+}
+
+body {
+  background-color: $color-background;
+}
+
+.container {
+  margin-top: 3em;
+  text-align: center;
+}
+
+.container>h1 {
+  font-size: 7em;
+}
+
+@media (max-width: 720px) {
+  .container>h1 {
+    font-size: 5em;
+  }
+}
