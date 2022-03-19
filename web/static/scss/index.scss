@@ -20,31 +20,67 @@ body {
   text-align: center;
 
   color: $color-text;
-  text-shadow: stroke(2px, $color-text-border);
   font-family: "Pixeboy";
-}
-
-.player {
-  margin-top: -3px;
-  text-shadow: stroke(1px, $color-text-border);
-}
-
-#rating {
-  margin-top: 50px;
-  font-family: "Lato";
-  font-size: 45px;
 }
 
 .container>h1 {
   font-size: 110px;
+  text-shadow: stroke(2px, $color-text-border);
 }
 
-@media (max-width: 720px) {
+#grid {
+  display: grid;
+  grid-template-columns: 30% 10%;
+  justify-content: center;
+
+  margin-top: 50px;
+  font-family: "Lato";
+  font-size: 40px;
+}
+
+.nick, .score {
+  margin-top: 20px;
+  font-weight: bold;
+}
+
+.place-1 {
+  color: $color-gold;
+}
+
+.place-2 {
+  color: $color-silver;
+}
+
+.place-3 {
+  color: $color-bronze;
+}
+
+
+@media (max-width: 1120px) and (min-width: 721px) {
+  #grid {
+    font-size: 30px;
+    grid-template-columns: 40% 13%;
+  }
+}
+
+@media (max-width: 720px) and (min-width: 491px) {
   .container>h1 {
-    font-size: 80px;
+    font-size: 90px;
   }
 
-  #rating {
-    font-size: 25px;
+  #grid {
+    font-size: 20px;
+    grid-template-columns: 45% 10%;
+  }
+}
+
+@media (max-width: 490px) {
+  .container>h1 {
+    font-size: 70px;
+  }
+
+  #grid {
+    font-size: 20px;
+    grid-template-columns: 60% 30%;
   }
 }

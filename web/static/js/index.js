@@ -6,17 +6,26 @@ var rating = [
     [75, 'Better']
 ];
 
-
 $(document).ready(function () {
     $.each(rating, function(i, [score, nick]) {
-        let player = $(`<p class="player">${score} ${nick}</p>`);
-        $('#rating').append(player);
+        let player = $(`
+            <div class="nick place-${i + 1}">
+                ${nick}
+            </div>
+            <div class="score place-${i + 1}">
+                ${score}
+            </div>
+        `);
+
+        $('#grid').append(player);
         player.hide();
 
         setTimeout(function () {
-            player.fadeIn(1000);
+            player.animate({
+                'opacity': 'show',
+                'marginTop': '-3px',
+                'fontSize': `115%`
+            }, 1000);
         }, 1000 * i);
-
-        console.log(i);
     });
 });
