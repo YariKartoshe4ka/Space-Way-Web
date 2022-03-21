@@ -31,7 +31,7 @@ SECRET_KEY = getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = getenv('DEBUG', False)
 
-ALLOWED_HOSTS = ['127.0.0.1', '192.168.1.34']
+ALLOWED_HOSTS = ['127.0.0.1', '192.168.1.35']
 
 
 # Application definition

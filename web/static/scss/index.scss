@@ -23,7 +23,7 @@ body {
   font-family: "Pixeboy";
 }
 
-.container>h1 {
+#header {
   font-size: 110px;
   text-shadow: stroke(2px, $color-text-border);
 }
@@ -41,6 +41,7 @@ body {
 .nick, .score {
   margin-top: 20px;
   font-weight: bold;
+  text-shadow: stroke(3px, $color-background);
 }
 
 .place-1 {
@@ -64,7 +65,7 @@ body {
 }
 
 @media (max-width: 720px) and (min-width: 491px) {
-  .container>h1 {
+  #header {
     font-size: 90px;
   }
 
@@ -72,15 +73,23 @@ body {
     font-size: 20px;
     grid-template-columns: 45% 10%;
   }
+
+  .nick, .score {
+    text-shadow: stroke(2px, $color-background);
+  }
 }
 
 @media (max-width: 490px) {
-  .container>h1 {
+  #header {
     font-size: 70px;
   }
 
   #grid {
     font-size: 20px;
     grid-template-columns: 60% 30%;
+  }
+
+  .nick, .score {
+    text-shadow: stroke(1px, $color-background);
   }
 }

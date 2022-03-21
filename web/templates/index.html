@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Space Way</title>
   <link rel="stylesheet" href="{% static 'css/index.css' %}">
+   <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}"/>
   <style>
     @font-face {
       font-family: "Pixeboy";
@@ -25,7 +26,25 @@
     <div id="grid"></div>
   </div>
 
+  <div id="background"></div>
+
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+  <script>
+    var backgroundImages = [
+      ["{% static 'img/background/point1.png' %}", [6, 6]],
+      ["{% static 'img/background/point2.png' %}", [6, 6]],
+      ["{% static 'img/background/point3.png' %}", [6, 6]],
+      ["{% static 'img/background/star1.png' %}", [30, 30]],
+      ["{% static 'img/background/star2.png' %}", [30, 30]],
+      ["{% static 'img/background/star3.png' %}", [30, 30]]
+    ];
+
+    var backgroundImagesWeight = [
+      27, 26, 26, 7, 7, 7
+    ];
+  </script>
+
   <script src="{% static 'js/index.js' %}"></script>
 </body>
 </html>
