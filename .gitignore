@@ -2,6 +2,7 @@
 __pycache__/
 *.pyc
 venv/
+migrations/
 
 # Styles generated with Sass
 *.css
