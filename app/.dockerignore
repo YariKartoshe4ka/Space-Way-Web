@@ -1,6 +1,7 @@
 # Python specific files
 *.pyc
 __pycache__/
+migrations/
 
 # Styles generated with Sass
 *.css
