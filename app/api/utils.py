@@ -1,9 +1,15 @@
+from base64 import b64encode
+from json import load, loads
 from multiprocessing import Process, Queue
 from pickle import dumps
 from random import getstate
-from base64 import b64encode
+import os
 
 from django.http import JsonResponse
+from jsonschema import validate
+
+
+CUR_DIR = os.path.dirname(__file__)
 
 
 def random_getstate():
@@ -27,12 +33,24 @@ def random_getstate():
     return b64encode(dumps(q.get())).decode()
 
 
-def api_response(func):
-    """Decorator for API responses
+# Load all API schemas
+api_schemas = {}
+
+for name in os.listdir(f'{CUR_DIR}/schemas'):
+    # Get absolute path to JSON in `schemas` directory
+    path = os.path.join(CUR_DIR, 'schemas', name)
+
+    if os.path.isfile(path) and path.endswith('.json'):
+        with open(path) as file:
+            api_schemas[name[:-5]] = load(file)
+
+
+def api_request(methods, schema):
+    """Decorator for API requests and them responses
 
     Args:
-        func (callable): The function to decorate. Must return at least the
-            status in `dict` object
+        schema (str): Name of file (without ".json" extension) with JSON schema
+            of current request arguments
 
     The API response has the following structure:
 
@@ -43,15 +61,59 @@ def api_response(func):
             "description": string    // Description of the fail/success of the request
             "result": null | object  // `null` in case of failure, object in case of success
         }
+
+    Example:
+
+        .. code-block:: python
+
+            @api_request(methods=['POST'], schema='start')
+            def api_view(request, body):
+                return {
+                    'status': 200,
+                    'result': 'Thanks!'
+                }
     """
-    def wrapper(*args, **kwargs):
-        response = {}
-        raw_response = func(*args, **kwargs)
+    def decorator(func):
+        """
 
-        response['status'] = raw_response['status']
-        response['description'] = raw_response.get('description', 'Request successfully processed')
-        response['result'] = raw_response.get('result')
+        Args:
+            func (callable): The function to decorate. Must return at least the
+                status in `dict` object
+        """
+        def wrapper(request, *args, **kwargs):
+            if request.method not in methods:
+                response = {
+                    'status': 405,
+                    'description': f"Method not allowed. Permitted methods: {', '.join(methods)}",
+                    'result': None
+                }
 
-        return JsonResponse(response, safe=True)
+                return JsonResponse(response, safe=True)
 
-    return wrapper
+            body = request.body.decode()
+
+            try:
+                body = loads(body)
+                validate(instance=body, schema=api_schemas[schema])
+
+            except Exception:
+                response = {
+                    'status': 400,
+                    'description': 'Body has an invalid JSON object',
+                    'result': None
+                }
+
+                return JsonResponse(response, safe=True)
+
+            raw_response = func(request, body, *args, **kwargs)
+
+            response = {}
+            response['status'] = raw_response['status']
+            response['description'] = raw_response.get('description', 'Request successfully processed')
+            response['result'] = raw_response.get('result')
+
+            return JsonResponse(response, safe=True)
+
+        return wrapper
+
+    return decorator
