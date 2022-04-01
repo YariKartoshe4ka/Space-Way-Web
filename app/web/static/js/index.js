@@ -1,12 +1,3 @@
-var rating = [
-    [110, 'YariKartoshe4ka'],
-    [93, 'Super Idol'],
-    [80, 'GamerPro'],
-    [79, 'NoobOrNoob'],
-    [75, 'Better']
-];
-
-
 function choice(items, weights) {
     weights = weights.slice();
     let i;
@@ -59,28 +50,30 @@ $(window).resize(generateBackground);
 generateBackground();
 
 
-$(document).ready(function () {
-    $.each(rating, function(i, [score, nick]) {
-        ++i;
+$(document).ready(function() {
+    $.getJSON('/api/get/', function(data) {
+        $.each(data['result'], function(i, [score, nick]) {
+            ++i;
 
-        let player = $(`
-            <div class="nick">
-                ${nick}
-            </div>
-            <div class="score place-${i}">
-                ${score}
-            </div>
-        `);
+            let player = $(`
+                <div class="nick">
+                    ${nick}
+                </div>
+                <div class="score place-${i}">
+                    ${score}
+                </div>
+            `);
 
-        player.hide();
-        $('#grid').append(player);
+            player.hide();
+            $('#grid').append(player);
 
-        setTimeout(function () {
-            player.animate({
-                'opacity': 'show',
-                'marginTop': '-3px',
-                'fontSize': `${Math.round(parseInt(player.css('fontSize')) * 1.15)}px`
-            }, 1000);
-        }, 1000 * (i - 1));
+            setTimeout(function() {
+                player.animate({
+                    'opacity': 'show',
+                    'marginTop': '-3px',
+                    'fontSize': `${Math.round(parseInt(player.css('fontSize')) * 1.15)}px`
+                }, 1000);
+            }, 1000 * (i - 1));
+        });
     });
 });

@@ -24,9 +24,6 @@ class Replay(models.Model):
         state (models.TextField): The initial state of the `random.getstate`.
             The data is dumped via pickle and encoded in base64
 
-        ip (models.GenericIPAddressField): Sender's IPv4, necessary for
-            blocking the user, when sending invalid replays frequently
-
     Fields, filled after replay upload:
         date_end (models.DateTimeField): End date of replay. Added to calculate
             the replay duration for its future validation
@@ -53,7 +50,6 @@ class Replay(models.Model):
         default=utils.random_getstate,
         editable=False
     )
-    ip = models.GenericIPAddressField(protocol='IPv4')
 
     # Fields, filled after replay upload
     date_end = models.DateTimeField(null=True)
@@ -62,21 +58,23 @@ class Replay(models.Model):
 
     # Fields, filled after replay validation
     choices = [
-        ('1', 'Waiting'),      # Replay has been created, waiting for upload
-        ('1.1', 'Expired'),    # Replay hasn't been uploaded for a certain time
-        ('1.2', 'Invalid'),    # Replay has been uploaded, but failed validation check
-        ('2', 'Queued'),       # Replay has been queued for verification
-        ('3', 'Replaying'),    # Replay is reproduced and verified
-        ('3.1', 'Forged'),     # Received score doesn't correspond to the declared one
-        ('4', 'Moderating'),   # Passed automatic verification, awaiting human verification
-        ('4.1', 'Banned'),     # Replay has been banned for violation
-        ('4.2', 'Approved')    # Replay has been approved
+        ('waiting', 'Waiting'),        # Replay has been created, waiting for upload
+        ('invalid', 'Invalid'),        # Replay has been uploaded, but failed validation check
+        ('queued', 'Queued'),          # Replay has been queued for verification
+        ('replaying', 'Replaying'),    # Replay is reproduced and verified
+        ('forged', 'Forged'),          # Received score doesn't correspond to the declared one
+        ('approved', 'Approved'),      # Replay has been approved
+        ('outdated', 'Outdated')       # Replay has been replaced with a newer one
     ]
     status = models.CharField(
-        max_length=3,
+        max_length=15,
         choices=choices,
         default=choices[0][0]
     )
 
+    class Meta:
+        db_table = 'api_v' + utils.spaceway_version()
+        ordering = ['-date_start']
+
     def __str__(self):
-        return f'"{self.nick}": {self.score}, {[v for k, v in self.choices if k == self.status][0]}'
+        return f'"{self.nick}": {self.score}, {self.status}'

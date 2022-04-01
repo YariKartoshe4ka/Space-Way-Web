@@ -1,4 +1,5 @@
 from base64 import b64encode
+from functools import lru_cache
 from json import load, loads
 from multiprocessing import Process, Queue
 from pickle import dumps
@@ -6,6 +7,7 @@ from random import getstate
 import os
 
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from jsonschema import validate
 
 
@@ -21,6 +23,7 @@ def random_getstate():
         str: `getstate` value, previously dumped via `pickle` and encoded
             in base64
     """
+
     # Set queue to communicate with process
     q = Queue()
 
@@ -45,12 +48,13 @@ for name in os.listdir(f'{CUR_DIR}/schemas'):
             api_schemas[name[:-5]] = load(file)
 
 
-def api_request(methods, schema):
+def api_method(methods, schema=None):
     """Decorator for API requests and them responses
 
     Args:
+        methods (list): List of supported HTTP methods
         schema (str): Name of file (without ".json" extension) with JSON schema
-            of current request arguments
+            of current request arguments. Supported only for the POST method
 
     The API response has the following structure:
 
@@ -73,6 +77,7 @@ def api_request(methods, schema):
                     'result': 'Thanks!'
                 }
     """
+
     def decorator(func):
         """
 
@@ -80,30 +85,29 @@ def api_request(methods, schema):
             func (callable): The function to decorate. Must return at least the
                 status in `dict` object
         """
+
+        @csrf_exempt
         def wrapper(request, *args, **kwargs):
             if request.method not in methods:
-                response = {
+                return JsonResponse({
                     'status': 405,
                     'description': f"Method not allowed. Permitted methods: {', '.join(methods)}",
                     'result': None
-                }
-
-                return JsonResponse(response, safe=True)
+                }, safe=True)
 
             body = request.body.decode()
 
             try:
-                body = loads(body)
-                validate(instance=body, schema=api_schemas[schema])
+                if request.method == 'POST':
+                    body = loads(body)
+                    validate(instance=body, schema=api_schemas[schema])
 
             except Exception:
-                response = {
+                return JsonResponse({
                     'status': 400,
                     'description': 'Body has an invalid JSON object',
                     'result': None
-                }
-
-                return JsonResponse(response, safe=True)
+                }, safe=True)
 
             raw_response = func(request, body, *args, **kwargs)
 
@@ -117,3 +121,13 @@ def api_request(methods, schema):
         return wrapper
 
     return decorator
+
+
+@lru_cache(maxsize=1)
+def spaceway_version():
+    import spaceway
+
+    base_dir = os.path.dirname(os.path.abspath(spaceway.main.__file__))
+    config = spaceway.config.ConfigManager(base_dir)
+
+    return config['version']
