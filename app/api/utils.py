@@ -121,13 +121,3 @@ def api_method(methods, schema=None):
         return wrapper
 
     return decorator
-
-
-@lru_cache(maxsize=1)
-def spaceway_version():
-    import spaceway
-
-    base_dir = os.path.dirname(os.path.abspath(spaceway.main.__file__))
-    config = spaceway.config.ConfigManager(base_dir)
-
-    return config['version']

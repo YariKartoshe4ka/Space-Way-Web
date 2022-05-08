@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Space Way</title>
   <link rel="stylesheet" href="{% static 'css/index.css' %}">
-   <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}"/>
+  <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}"/>
   <style>
     @font-face {
       font-family: "Pixeboy";
@@ -26,11 +26,28 @@
     <div id="grid"></div>
   </div>
 
+  <div class="dropdown">
+    <div class="dropdown-content">
+      {% for version in versions %}
+        {% if version != cur_version %}
+          <a href="{{ version }}">
+            v{{ version }} {% if version == versions|last %}(latest){% endif %}
+          </a>
+        {% endif %}
+      {% endfor %}
+    </div>
+    <a class="dropdown-btn">
+      v{{ cur_version }} {% if cur_version == versions|last %}(latest){% endif %}
+    </a>
+  </div>
+
   <div id="background"></div>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
   <script>
+    var version = "{{ cur_version }}";
+
     var backgroundImages = [
       ["{% static 'img/background/point1.png' %}", [6, 6]],
       ["{% static 'img/background/point2.png' %}", [6, 6]],

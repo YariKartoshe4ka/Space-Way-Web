@@ -1,5 +1,6 @@
-@import "variables";
-@import "functions";
+@use "sass:color";
+@use "variables" as *;
+@use "functions" as *;
 
 
 * {
@@ -54,6 +55,43 @@ body {
 
 .place-3 {
   color: $color-bronze;
+}
+
+.dropdown {
+  text-align: right;
+  position: fixed;
+  bottom: 5px;
+  right: 5px;
+  color: $color-text-border;
+  font-family: Lato;
+  font-weight: bold;
+}
+
+.dropdown-btn {
+  padding: 5px;
+  cursor: pointer;
+  text-shadow: stroke(2px, $color-background);
+}
+
+.dropdown-content {
+  display: none;
+  z-index: 1;
+}
+
+.dropdown-content a {
+  padding: 5px;
+  text-decoration: none;
+  display: block;
+  color: color.adjust($color-text-border, $blackness: 60%);
+  text-shadow: stroke(2px, $color-background);
+}
+
+.dropdown-content a:hover {
+  color: $color-text-border;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
 }
 
 

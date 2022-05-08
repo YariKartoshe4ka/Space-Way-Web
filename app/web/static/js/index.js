@@ -51,7 +51,7 @@ generateBackground();
 
 
 $(document).ready(function() {
-    $.getJSON('/api/get/', function(data) {
+    $.getJSON(`/api/get/?v=${version}`, function(data) {
         $.each(data['result'], function(i, [score, nick]) {
             ++i;
 
