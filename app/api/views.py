@@ -1,6 +1,6 @@
 from re import match
 
-from .models import Replay
+from .models import get_replay_model
 from .utils import api_method
 
 
@@ -12,6 +12,7 @@ def get(request, body):
         score (int): The final score in this replay
         nick (str): Nickname of the player who created the replay
     """
+    Replay = get_replay_model(request.GET.get('v', 'latest'))
 
     response = {'status': 200, 'result': []}
 
@@ -36,6 +37,7 @@ def start(request, body):
         id (str): The replay ID. You need it to upload the replay itself later
         state (str): Initial state of the randomizer
     """
+    Replay = get_replay_model(request.GET.get('v', 'latest'))
 
     # Validate body
     if not match(r'^[\w!?:; \(\)]{1,15}$', body['nick']):

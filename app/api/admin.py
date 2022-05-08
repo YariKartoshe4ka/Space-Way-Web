@@ -1,5 +1,7 @@
 from django.contrib import admin
 
-from .models import Replay
+from .models import versions, get_replay_model
 
-admin.site.register(Replay)
+
+for version in versions:
+    admin.site.register(get_replay_model(version))
